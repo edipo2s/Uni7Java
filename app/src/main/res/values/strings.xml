@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">Uni7Java</string>
+    <string name="name">Nome</string>
+    <string name="password">Senha</string>
+    <string name="login">Logar</string>
+    <string name="register">Registrar</string>
+    <string name="weather">Temperatura em %s</string>
+
+</resources>
