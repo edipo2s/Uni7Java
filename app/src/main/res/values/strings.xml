@@ -7,9 +7,11 @@
     <string name="register">Registrar</string>
     <string name="weather">Temperatura em %s</string>
 
-    <string name="error_name_empty">Nome não pode ser vazio</string>
-    <string name="error_name_used">Nome já está em uso</string>
+    <string name="error_name_empty">Nome de usuário não pode ser vazio</string>
+    <string name="error_name_used">Nome de usuário já está em uso</string>
     <string name="error_password_empty">Senha não pode ser vazio</string>
+    <string name="error_credentials_invalid">Nome de usuário ou Senha incorretos</string>
+    <string name="success_login">Usuário logado com sucesso.</string>
     <string name="success_register">Usuário registrado com sucesso.</string>
 
 </resources>

@@ -76,7 +76,7 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private static class RegisterTask extends AsyncTask<String, Void, Boolean> {
+    private static final class RegisterTask extends AsyncTask<String, Void, Boolean> {
 
         private final Application application;
         private final FragmentManager fragmentManager;
@@ -89,11 +89,11 @@ public class RegisterFragment extends Fragment {
         @Override
         protected Boolean doInBackground(String... params) {
             String name = params[0];
-            String password = params[1];
             CredentialsDAO dao = AppDatabase.getInstance(application).getDatabase().getCredentialsDAO();
             if (dao.findByName(name) != null) {
                 return false;
             }
+            String password = params[1];
             dao.insertAll(new Credentials(name, password));
             return true;
         }
