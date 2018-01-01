@@ -1,7 +1,6 @@
 package com.edipo.uni7java;
 
 import android.app.Application;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -73,7 +72,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private static final class LoginTask extends AsyncTask<String, Void, Boolean> {
+    private static final class LoginTask extends AsyncTask<String, Void, String> {
 
         private final Application application;
 
@@ -82,21 +81,22 @@ public class LoginFragment extends Fragment {
         }
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             String name = params[0];
             String password = params[1];
             CredentialsDAO dao = AppDatabase.getInstance(application).getDatabase().getCredentialsDAO();
-            return dao.findByNamePassword(name, password) != null;
+            if (dao.findByNamePassword(name, password) != null) {
+                return name;
+            } else {
+                return null;
+            }
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
+        protected void onPostExecute(String username) {
+            if (username != null) {
                 Toast.makeText(application, R.string.success_login, Toast.LENGTH_LONG).show();
-                Intent intentWeather = new Intent(application, WeatherInfoActivity.class);
-                intentWeather.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intentWeather.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                application.startActivity(intentWeather);
+                application.startActivity(WeatherInfoActivity.getIntent(application, username));
             } else {
                 Toast.makeText(application, R.string.error_credentials_invalid, Toast.LENGTH_LONG).show();
             }

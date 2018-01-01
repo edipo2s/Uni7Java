@@ -1,11 +1,11 @@
 <resources>
 
     <string name="app_name">Uni7Java</string>
+
     <string name="username">Nome de Usuário</string>
     <string name="password">Senha</string>
     <string name="login">Logar</string>
     <string name="register">Registrar</string>
-    <string name="weather">Temperatura em %s</string>
 
     <string name="error_name_empty">Nome de usuário não pode ser vazio</string>
     <string name="error_name_used">Nome de usuário já está em uso</string>
@@ -13,5 +13,12 @@
     <string name="error_credentials_invalid">Nome de usuário ou Senha incorretos</string>
     <string name="success_login">Usuário logado com sucesso.</string>
     <string name="success_register">Usuário registrado com sucesso.</string>
+
+    <string name="weather_user">Usuário:</string>
+    <string name="weather_loading">Carregando…</string>
+    <string name="weather_temperature">Temperatura em %s</string>
+    <string name="weather_gps_permission_denied">Permissão de acesso ao GPS negada.</string>
+    <string name="weather_gps_permission_rationale">A permissão de acesso ao GPS é necessária para se obter a localização.</string>
+    <string name="error_location">Error ao obter localização.</string>
 
 </resources>
