@@ -1,10 +1,15 @@
 <resources>
 
     <string name="app_name">Uni7Java</string>
-    <string name="name">Nome</string>
+    <string name="username">Nome de Usuário</string>
     <string name="password">Senha</string>
     <string name="login">Logar</string>
     <string name="register">Registrar</string>
     <string name="weather">Temperatura em %s</string>
+
+    <string name="error_name_empty">Nome não pode ser vazio</string>
+    <string name="error_name_used">Nome já está em uso</string>
+    <string name="error_password_empty">Senha não pode ser vazio</string>
+    <string name="success_register">Usuário registrado com sucesso.</string>
 
 </resources>

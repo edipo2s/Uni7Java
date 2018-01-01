@@ -16,7 +16,7 @@
         android:id="@+id/edit_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/name"
+        android:hint="@string/username"
         app:layout_constraintBottom_toTopOf="@id/edit_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
