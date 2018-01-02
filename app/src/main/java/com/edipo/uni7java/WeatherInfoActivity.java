@@ -64,16 +64,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
         tvTemp = findViewById(R.id.text_weather_temp);
         TextView tvUserName = findViewById(R.id.text_username);
         tvUserName.setText(getIntent().getStringExtra(EXTRA_USERNAME));
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (ContextCompat.checkSelfPermission(this, GPS_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-            requestUserLocation();
-        } else {
-            requestGPSPermission();
-        }
+        checkForUserLocation();
     }
 
     @Override
@@ -94,6 +85,14 @@ public class WeatherInfoActivity extends AppCompatActivity {
         }
     }
 
+    private void checkForUserLocation() {
+        if (ContextCompat.checkSelfPermission(this, GPS_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+            requestUserLocation();
+        } else {
+            requestGPSPermission();
+        }
+    }
+
     private void requestGPSPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
         ActivityCompat.requestPermissions(this, permissions, RC_PERMISSION);
@@ -105,6 +104,10 @@ public class WeatherInfoActivity extends AppCompatActivity {
         LocationServices.getFusedLocationProviderClient(this)
                 .getLastLocation()
                 .addOnSuccessListener(this, location -> {
+                    if (location == null) {
+                        showLocationError();
+                        return;
+                    }
                     requestTemperatureFromLocation(location.getLatitude(), location.getLongitude());
                     try {
                         List<Address> addresses = new Geocoder(getApplicationContext())
@@ -132,31 +135,40 @@ public class WeatherInfoActivity extends AppCompatActivity {
                 .enqueue(new Callback<WeatherRsp>() {
                     @Override
                     public void onResponse(Call<WeatherRsp> call, Response<WeatherRsp> response) {
-                        WeatherRsp rsp = response.body();
-                        if (response.isSuccessful() && rsp != null) {
-                            tvTemp.setText(getString(R.string.weather_temperature, rsp.main.temp));
-                            if (rsp.weather.size() > 0) {
-                                tvDesc.setText(rsp.weather.get(0).description);
-                                Glide.with(WeatherInfoActivity.this)
-                                        .load(String.format("http://openweathermap.org/img/w/%s.png",
-                                                rsp.weather.get(0).icon))
-                                        .into(ivWeather);
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), R.string.error_weather, Toast.LENGTH_LONG).show();
+                        WeatherRsp body = response.body();
+                        if (!response.isSuccessful() || body == null) {
+                            showTemperatureError();
+                            return;
+                        }
+                        tvTemp.setText(getString(R.string.weather_temperature, body.main.temp));
+                        if (body.weather.size() > 0) {
+                            WeatherRsp.Weather weather = body.weather.get(0);
+                            tvDesc.setText(weather.description);
+                            Glide.with(WeatherInfoActivity.this)
+                                    .load(String.format("http://openweathermap.org/img/w/%s.png",
+                                            weather.icon))
+                                    .into(ivWeather);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<WeatherRsp> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), R.string.error_weather, Toast.LENGTH_LONG).show();
+                        showTemperatureError();
                         t.printStackTrace();
                     }
                 });
     }
 
+    private void showTemperatureError() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.error_weather, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.try_again, v -> checkForUserLocation())
+                .show();
+    }
+
     private void showLocationError() {
-        Toast.makeText(this, R.string.error_location, Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(android.R.id.content), R.string.error_location, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.try_again, v -> checkForUserLocation())
+                .show();
     }
 
 }

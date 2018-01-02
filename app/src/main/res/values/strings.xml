@@ -6,6 +6,7 @@
     <string name="password">Senha</string>
     <string name="login">Logar</string>
     <string name="register">Registrar</string>
+    <string name="try_again">Tentar novamente</string>
 
     <string name="error_name_empty">Nome de usuário não pode ser vazio</string>
     <string name="error_name_used">Nome de usuário já está em uso</string>
@@ -15,7 +16,7 @@
 
     <string name="weather_user">Usuário:</string>
     <string name="weather_loading">Carregando…</string>
-    <string name="weather_temperature">%d°C</string>
+    <string name="weather_temperature">%.0f°C</string>
     <string name="weather_gps_permission_denied">Permissão de acesso ao GPS negada.</string>
     <string name="weather_gps_permission_rationale">A permissão de acesso ao GPS é necessária para se obter a localização.</string>
     <string name="error_location">Error ao obter localização.</string>

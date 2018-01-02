@@ -9,7 +9,7 @@ public class WeatherRsp {
 
     public static class Main {
 
-        public int temp;
+        public float temp;
 
     }
 
