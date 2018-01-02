@@ -17,12 +17,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.edipo.uni7java.remote.IOpenWeatherMap;
+import com.edipo.uni7java.remote.WeatherRsp;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class WeatherInfoActivity extends AppCompatActivity {
 
@@ -38,14 +49,18 @@ public class WeatherInfoActivity extends AppCompatActivity {
         return intent;
     }
 
+    private ImageView ivWeather;
     private TextView tvCity;
+    private TextView tvDesc;
     private TextView tvTemp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        ivWeather = findViewById(R.id.image_weather);
         tvCity = findViewById(R.id.text_weather_city);
+        tvDesc = findViewById(R.id.text_weather_desc);
         tvTemp = findViewById(R.id.text_weather_temp);
         TextView tvUserName = findViewById(R.id.text_username);
         tvUserName.setText(getIntent().getStringExtra(EXTRA_USERNAME));
@@ -95,8 +110,9 @@ public class WeatherInfoActivity extends AppCompatActivity {
                         List<Address> addresses = new Geocoder(getApplicationContext())
                                 .getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                         if (addresses.size() > 0) {
-                            String city = addresses.get(0).getLocality();
-                            tvCity.setText(getString(R.string.weather_temperature, city));
+                            Address address = addresses.get(0);
+                            tvCity.setText(String.format(Locale.getDefault(), "%s - %s",
+                                    address.getLocality(), address.getAdminArea()));
                         } else {
                             showLocationError();
                         }
@@ -106,8 +122,37 @@ public class WeatherInfoActivity extends AppCompatActivity {
                 });
     }
 
-    private void requestTemperatureFromLocation(double latitude, double longitude) {
+    private void requestTemperatureFromLocation(double lat, double lon) {
+        new Retrofit.Builder()
+                .addConverterFactory(MoshiConverterFactory.create())
+                .baseUrl("https://api.openweathermap.org/")
+                .build()
+                .create(IOpenWeatherMap.class)
+                .getWeather(lat, lon, "pt", "metric", BuildConfig.WEATHER_APPID)
+                .enqueue(new Callback<WeatherRsp>() {
+                    @Override
+                    public void onResponse(Call<WeatherRsp> call, Response<WeatherRsp> response) {
+                        WeatherRsp rsp = response.body();
+                        if (response.isSuccessful() && rsp != null) {
+                            tvTemp.setText(getString(R.string.weather_temperature, rsp.main.temp));
+                            if (rsp.weather.size() > 0) {
+                                tvDesc.setText(rsp.weather.get(0).description);
+                                Glide.with(WeatherInfoActivity.this)
+                                        .load(String.format("http://openweathermap.org/img/w/%s.png",
+                                                rsp.weather.get(0).icon))
+                                        .into(ivWeather);
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.error_weather, Toast.LENGTH_LONG).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<WeatherRsp> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), R.string.error_weather, Toast.LENGTH_LONG).show();
+                        t.printStackTrace();
+                    }
+                });
     }
 
     private void showLocationError() {

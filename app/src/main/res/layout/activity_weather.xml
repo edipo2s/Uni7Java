@@ -26,26 +26,39 @@
         app:layout_constraintTop_toBottomOf="@id/text_username_label"
         tools:text="Édipo" />
 
-    <ImageView
-        android:id="@+id/image_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/weather"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_username" />
-
     <TextView
         android:id="@+id/text_weather_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/weather_loading"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_username"
+        tools:text="Curitiba - Paraná" />
+
+    <ImageView
+        android:id="@+id/image_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/weather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_weather_city" />
+
+    <TextView
+        android:id="@+id/text_weather_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/weather_loading"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_weather"
-        tools:text="Temperatura em Curitiba" />
+        tools:text="Nuvens carregadas" />
 
     <TextView
         android:id="@+id/text_weather_temp"
@@ -54,7 +67,7 @@
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_weather_city"
+        app:layout_constraintTop_toBottomOf="@id/text_weather_desc"
         tools:text="21°C" />
 
 </android.support.constraint.ConstraintLayout>

@@ -95,7 +95,6 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(String username) {
             if (username != null) {
-                Toast.makeText(application, R.string.success_login, Toast.LENGTH_LONG).show();
                 application.startActivity(WeatherInfoActivity.getIntent(application, username));
             } else {
                 Toast.makeText(application, R.string.error_credentials_invalid, Toast.LENGTH_LONG).show();
